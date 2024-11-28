@@ -1,4 +1,6 @@
 package dev.ai.alibaba.samples.executor;
 
-public record IntermediateStep(AgentAction action, String observation) {
+import dev.ai.alibaba.samples.executor.state.Action;
+
+public record IntermediateStep(Action action, String observation) {
 }

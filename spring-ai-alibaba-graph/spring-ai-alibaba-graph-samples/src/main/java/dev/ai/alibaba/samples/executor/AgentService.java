@@ -1,5 +1,6 @@
 package dev.ai.alibaba.samples.executor;
 
+import dev.ai.alibaba.samples.executor.state.Step;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.ToolResponseMessage;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -23,14 +24,14 @@ public class AgentService {
 		this.toolService = toolService;
 	}
 
-	private ToolResponseMessage buildToolResponseMessage(AgentExecutor.Step intermediateStep) {
+	private ToolResponseMessage buildToolResponseMessage(Step intermediateStep) {
 		var toolCall = intermediateStep.action().toolCall();
 		var response = new ToolResponseMessage.ToolResponse(toolCall.id(), toolCall.name(),
 				intermediateStep.observation());
 		return new ToolResponseMessage(List.of(response), Map.of());
 	}
 
-	public ChatResponse execute(String input, List<AgentExecutor.Step> intermediateSteps) {
+	public ChatResponse execute(String input, List<Step> intermediateSteps) {
 		var messages = intermediateSteps.stream()
 			.map(this::buildToolResponseMessage)
 			.toArray(ToolResponseMessage[]::new);

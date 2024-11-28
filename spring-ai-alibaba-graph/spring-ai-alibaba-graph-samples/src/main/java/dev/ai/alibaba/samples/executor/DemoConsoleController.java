@@ -1,9 +1,11 @@
 package dev.ai.alibaba.samples.executor;
 
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
+import dev.ai.alibaba.samples.executor.state.GeneralState;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import dev.ai.alibaba.samples.executor.state.Outcome;
 
 import java.util.Map;
 
@@ -32,9 +34,9 @@ public class DemoConsoleController implements CommandLineRunner {
 
 		var workflow = graph.compile();
 
-		var result = workflow.invoke(Map.of(AgentExecutor.State.INPUT, "what is the weather in Napoli ?"));
+		var result = workflow.invoke(Map.of(GeneralState.INPUT, "what is the weather in Napoli ?"));
 
-		var finish = result.flatMap(AgentExecutor.State::agentOutcome).map(AgentExecutor.Outcome::finish).orElseThrow();
+		var finish = result.flatMap(GeneralState::agentOutcome).map(Outcome::finish).orElseThrow();
 
 		log.info("result: {}", finish.returnValues());
 	}

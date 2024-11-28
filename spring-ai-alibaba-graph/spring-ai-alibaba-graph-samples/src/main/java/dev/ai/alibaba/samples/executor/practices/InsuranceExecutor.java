@@ -1,8 +1,9 @@
-package dev.ai.alibaba.samples.executor;
+package dev.ai.alibaba.samples.executor.practices;
 
 import com.alibaba.cloud.ai.graph.GraphStateException;
 import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.serializer.StateSerializer;
+import dev.ai.alibaba.samples.executor.AgentService;
 import dev.ai.alibaba.samples.executor.state.Action;
 import dev.ai.alibaba.samples.executor.state.Finish;
 import dev.ai.alibaba.samples.executor.state.GeneralState;
@@ -23,7 +24,7 @@ import static com.alibaba.cloud.ai.graph.action.AsyncNodeAction.node_async;
 
 @Slf4j
 @Service
-public class AgentExecutor {
+public class InsuranceExecutor {
 
 	public enum Serializers {
 
@@ -56,10 +57,10 @@ public class AgentExecutor {
 			}
 
 			return new StateGraph<>(GeneralState.SCHEMA, stateSerializer).addEdge(START, "agent") // 下一个节点
-				.addNode("agent", node_async(AgentExecutor.this::callAgent)) // 调用llm
-				.addNode("action", AgentExecutor.this::executeTools) // 独立节点
+				.addNode("agent", node_async(InsuranceExecutor.this::callAgent)) // 调用llm
+				.addNode("action", InsuranceExecutor.this::executeTools) // 独立节点
 				.addConditionalEdges( // 条件边，在agent节点之后
-						"agent", edge_async(AgentExecutor.this::shouldContinue), // 根据agent的结果，进行条件判断
+						"agent", edge_async(InsuranceExecutor.this::shouldContinue), // 根据agent的结果，进行条件判断
 						Map.of("continue", "action", "end", END) // 不同分支，使action不再独立
 				)
 				.addEdge("action", "agent") // action后返回agent，非条件边
@@ -74,9 +75,10 @@ public class AgentExecutor {
 	}
 
 
+
 	private final AgentService agentService;
 
-	public AgentExecutor(AgentService agentService) {
+	public InsuranceExecutor(AgentService agentService) {
 		this.agentService = agentService;
 	}
 
