@@ -333,7 +333,7 @@ async #callSubmitAction() {
     this.dispatchEvent( new CustomEvent( 'init', { 
       detail: { 
         threads: [ ['default', [] ] ],
-        title: 'LangGraph4j : TEST',
+        title: 'SpringAiGraph : TEST',
         graph:`
 ---
 title: TEST

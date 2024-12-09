@@ -1,6 +1,6 @@
-# 🦜🕸️ LangGraph4j Studio
+# 🦜🕸️ SpringAiGraph Studio
 
-An **embed playground webapp** that runs a Langgraph4j workflow in visual way.
+An **embed playground webapp** that runs a SpringAiGraph workflow in visual way.
 
 ![result](studio-demo.gif)
 
@@ -25,7 +25,7 @@ var saver = new MemorySaver();
 // connect playgroud webapp to workflow
 var server = LangGraphStreamingServerJetty.builder()
                                       .port(8080)
-                                      .title("LANGGRAPH4j - TEST")
+                                      .title("SpringAiGraph - TEST")
                                       .stateGraph( workflow )
                                       .checkpointSaver(saver)
                                       .addInputStringArg("input")

@@ -1,14 +1,14 @@
 # Conceptual Guides
 
-In this guide we will explore the concepts behind build agentic and multi-agent systems with LangGraph. We assume you have already learned the basics and want to deepen your understanding of LangGraph4j's underlying design and inner workings.
+In this guide we will explore the concepts behind build agentic and multi-agent systems with LangGraph. We assume you have already learned the basics and want to deepen your understanding of SpringAiGraph's underlying design and inner workings.
 
-There are three main parts to this concept guide. First, we'll discuss at a very high level what it means to be agentic. Next, we'll look at lower-level concepts in LangGraph4j that are core for understanding how to build your own agentic systems. Finally, we'll discuss common agentic patterns and how you can achieve those with LangGraph4j. These will be mostly conceptual guides - for more technical, hands-on guides see our [how-to guides](../how-tos/index.md)
+There are three main parts to this concept guide. First, we'll discuss at a very high level what it means to be agentic. Next, we'll look at lower-level concepts in SpringAiGraph that are core for understanding how to build your own agentic systems. Finally, we'll discuss common agentic patterns and how you can achieve those with SpringAiGraph. These will be mostly conceptual guides - for more technical, hands-on guides see our [how-to guides](../how-tos/index.md)
 
 <!-- 
-LangGraph4j for Agentic Applications
+SpringAiGraph for Agentic Applications
 
 - [What does it mean to be agentic?](high_level.md#what-does-it-mean-to-be-agentic)
-- [Why LangGraph4j](high_level.md#why-langgraph)
+- [Why SpringAiGraph](high_level.md#why-langgraph)
 - [Deployment](high_level.md#deployment) 
 -->
 

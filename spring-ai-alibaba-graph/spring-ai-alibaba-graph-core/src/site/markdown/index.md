@@ -1,3 +1,3 @@
-# 🦜🕸️ LangGraph4j Core
+# 🦜🕸️ SpringAiGraph Core
 
-This is the core library for LangGraph4j.
+This is the core library for SpringAiGraph.

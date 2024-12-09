@@ -2,7 +2,7 @@
 
 ## Graphs
 
-At its core, LangGraph4j models agent workflows as graphs. You define the behavior of your agents using three key components:
+At its core, SpringAiGraph models agent workflows as graphs. You define the behavior of your agents using three key components:
 
 1. [`State`](#state): A shared data structure that represents the current snapshot of your application. It is represented by an [`AgentState`] object.
 
@@ -10,13 +10,13 @@ At its core, LangGraph4j models agent workflows as graphs. You define the behavi
 
 3. [`Edges`](#edges): A **Functional Interface**  ([`AsyncEdgeAction`]) that determine which `Node` to execute next based on the current `State`. They can be conditional branches or fixed transitions.
 
-By composing `Nodes` and `Edges`, you can create complex, looping workflows that evolve the `State` over time. The real power, though, comes from how LangGraph4j manages that `State`. 
+By composing `Nodes` and `Edges`, you can create complex, looping workflows that evolve the `State` over time. The real power, though, comes from how SpringAiGraph manages that `State`. 
 To emphasize: `Nodes` and `Edges` are like functions - they can contain an LLM or just Java code.
 
 In short: _nodes do the work. edges tell what to do next_.
 
 <!-- 
-LangGraph4j's underlying graph algorithm uses [message passing](https://en.wikipedia.org/wiki/Message_passing) to define a general program. When a Node completes its operation, it sends messages along one or more edges to other node(s). These recipient nodes then execute their functions, pass the resulting messages to the next set of nodes, and the process continues. Inspired by Google's [Pregel](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing/) system, the program proceeds in discrete "super-steps." 
+SpringAiGraph's underlying graph algorithm uses [message passing](https://en.wikipedia.org/wiki/Message_passing) to define a general program. When a Node completes its operation, it sends messages along one or more edges to other node(s). These recipient nodes then execute their functions, pass the resulting messages to the next set of nodes, and the process continues. Inspired by Google's [Pregel](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing/) system, the program proceeds in discrete "super-steps." 
 -->
 <!-- 
 A super-step can be considered a single iteration over the graph nodes. Nodes that run in parallel are part of the same super-step, while nodes that run sequentially belong to separate super-steps. At the start of graph execution, all nodes begin in an `inactive` state. A node becomes `active` when it receives a new message (state) on any of its incoming edges (or "channels"). The active node then runs its function and responds with updates. At the end of each super-step, nodes with no incoming messages vote to `halt` by marking themselves as `inactive`. The graph execution terminates when all nodes are `inactive` and no messages are in transit.
@@ -110,9 +110,9 @@ Currently the main class for state's serialization using built-in java stream is
 ## Nodes
 
 <!--
-In LangGraph4j, nodes are typically a **Functional Interface** ([`AsyncNodeAction`])  where the argument is the [state](#state), and (optionally), the **second** positional argument is a "config", containing optional [configurable parameters](#configuration) (such as a `thread_id`).
+In SpringAiGraph, nodes are typically a **Functional Interface** ([`AsyncNodeAction`])  where the argument is the [state](#state), and (optionally), the **second** positional argument is a "config", containing optional [configurable parameters](#configuration) (such as a `thread_id`).
 -->
-In LangGraph4j, nodes are typically a **Functional Interface** ([`AsyncNodeAction`])  where the argument is the [state](#state), you add these nodes to a graph using the [`addNode`] method:
+In SpringAiGraph, nodes are typically a **Functional Interface** ([`AsyncNodeAction`])  where the argument is the [state](#state), you add these nodes to a graph using the [`addNode`] method:
 
 ```java
 
@@ -239,7 +239,7 @@ You must provide an object that maps the `routingFunction`'s output to the name 
 
 By default, `Nodes` and `Edges` are defined ahead of time and operate on the same shared state. However, there can be cases where the exact edges are not known ahead of time and/or you may want different versions of `State` to exist at the same time. A common of example of this is with `map-reduce` design patterns. In this design pattern, a first node may generate an array of objects, and you may want to apply some other node to all those objects. The number of objects may be unknown ahead of time (meaning the number of edges may not be known) and the input `State` to the downstream `Node` should be different (one for each generated object).
 
-To support this design pattern, LangGraph4j supports returning [`Send`](/langgraphjs/reference/classes/langgraph.Send.html) objects from conditional edges. `Send` takes two arguments: first is the name of the node, and second is the state to pass to that node.
+To support this design pattern, SpringAiGraph supports returning [`Send`](/langgraphjs/reference/classes/langgraph.Send.html) objects from conditional edges. `Send` takes two arguments: first is the name of the node, and second is the state to pass to that node.
 
 ```typescript
 const continueToJokes = (state: { subjects: string[] }) => {
@@ -251,7 +251,7 @@ graph.addConditionalEdges("nodeA", continueToJokes);
 
 ## Checkpointer
 
-LangGraph4j has a built-in persistence layer, implemented through [`Checkpointers`]. When you use a checkpointer with a graph, you can interact with the state of that graph. When you use a checkpointer with a graph, you can interact with and manage the graph's state. The checkpointer saves a _checkpoint_ of the graph state at every step, enabling several powerful capabilities:
+SpringAiGraph has a built-in persistence layer, implemented through [`Checkpointers`]. When you use a checkpointer with a graph, you can interact with the state of that graph. When you use a checkpointer with a graph, you can interact with and manage the graph's state. The checkpointer saves a _checkpoint_ of the graph state at every step, enabling several powerful capabilities:
 
 First, checkpointers facilitate [human-in-the-loop workflows](agentic_concepts.md#human-in-the-loop) workflows by allowing humans to inspect, interrupt, and approve steps. Checkpointers are needed for these workflows as the human has to be able to view the state of a graph at any point in time, and the graph has to be to resume execution after the human has made any updates to the state.
 
@@ -367,7 +367,7 @@ See [this guide](../how-tos/breakpoints.html) for a full walkthrough of how to a
 
 ## Visualization
 
-It's often nice to be able to visualize graphs, especially as they get more complex. LangGraph4j comes with several built-in ways to visualize graphs using diagram-as-code tools such as [PlantUML] and [Mermaid] through the [`graph.getGraph`] method. 
+It's often nice to be able to visualize graphs, especially as they get more complex. SpringAiGraph comes with several built-in ways to visualize graphs using diagram-as-code tools such as [PlantUML] and [Mermaid] through the [`graph.getGraph`] method. 
 
 ```java
 // for PlantUML
@@ -383,35 +383,35 @@ System.out.println(result.getContent());
 
 ## Streaming
 
-LangGraph4j is built with first class support for streaming. it uses [java-async-generator] library to help with this. 
+SpringAiGraph is built with first class support for streaming. it uses [java-async-generator] library to help with this. 
 
 <!-- 
-There are several different streaming modes that LangGraph4j supports:
+There are several different streaming modes that SpringAiGraph supports:
 
 - [`"values"`](../how-tos/stream-values.html): This streams the full value of the state after each step of the graph.
 - [`"updates`](../how-tos/stream-updates.html): This streams the updates to the state after each step of the graph. If multiple updates are made in the same step (e.g. multiple nodes are run) then those updates are streamed separately.
 
 In addition, you can use the [`streamEvents`](https://v02.api.js.langchain.com/classes/langchain_core_runnables.Runnable.html#streamEvents) method to stream back events that happen _inside_ nodes. This is useful for [streaming tokens of LLM calls](../how-tos/streaming-tokens-without-langchain.html). -->
 
-[PlainTextStateSerializer]: /langgraph4j/apidocs//org/bsc/langgraph4j/serializer/plain_text/PlainTextStateSerializer.html
-[ObjectStreamStateSerializer]: /langgraph4j/apidocs/org/bsc/langgraph4j/serializer/std/ObjectStreamStateSerializer.html
-[Serializer]: /langgraph4j/apidocs/org/bsc/langgraph4j/serializer/Serializer.html
-[Reducer]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/Reducer.html
-[`AgentState`]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/AgentState.html
-[`StateGraph`]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html
-[`Channel`]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/Channel.html
-[`AsyncNodeAction`]: /langgraph4j/apidocs/org/bsc/langgraph4j/action/AsyncNodeAction.html
-[`AsyncEdgeAction`]: /langgraph4j/apidocs/org/bsc/langgraph4j/action/AsyncEdgeAction.html
-[`AppenderChannel`]: /langgraph4j/apidocs/org/bsc/langgraph4j/state/AppenderChannel.html
-[`addNode`]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html#addNode-java.lang.String-action.com.alibaba.ai.graph.AsyncNodeAction-
-[`addEdge`]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html#addEdge-java.lang.String-java.lang.String-
-[`addConditionalEdges`]: /langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html#addConditionalEdges-java.lang.String-action.com.alibaba.ai.graph.AsyncEdgeAction-java.util.Map-
+[PlainTextStateSerializer]: /SpringAiGraph/apidocs//org/bsc/SpringAiGraph/serializer/plain_text/PlainTextStateSerializer.html
+[ObjectStreamStateSerializer]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/serializer/std/ObjectStreamStateSerializer.html
+[Serializer]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/serializer/Serializer.html
+[Reducer]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/Reducer.html
+[`AgentState`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/AgentState.html
+[`StateGraph`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/StateGraph.html
+[`Channel`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/Channel.html
+[`AsyncNodeAction`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/action/AsyncNodeAction.html
+[`AsyncEdgeAction`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/action/AsyncEdgeAction.html
+[`AppenderChannel`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/AppenderChannel.html
+[`addNode`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/StateGraph.html#addNode-java.lang.String-action.com.alibaba.ai.graph.AsyncNodeAction-
+[`addEdge`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/StateGraph.html#addEdge-java.lang.String-java.lang.String-
+[`addConditionalEdges`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/StateGraph.html#addConditionalEdges-java.lang.String-action.com.alibaba.ai.graph.AsyncEdgeAction-java.util.Map-
 [`CompletableFuture`]: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html
-[`Checkpointers`]: /langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/BaseCheckpointSaver.html
-[`graph.updateState(config,values,asNode)`]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#updateState-com.alibaba.cloud.ai.graph.RunnableConfig-java.util.Map-java.lang.String-
-[`graph.getStateHistory(config)`]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#getStateHistory-com.alibaba.cloud.ai.graph.RunnableConfig-
-[`graph.getState(config)`]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#getState-com.alibaba.cloud.ai.graph.RunnableConfig-
+[`Checkpointers`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/checkpoint/BaseCheckpointSaver.html
+[`graph.updateState(config,values,asNode)`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/CompiledGraph.html#updateState-com.alibaba.cloud.ai.graph.RunnableConfig-java.util.Map-java.lang.String-
+[`graph.getStateHistory(config)`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/CompiledGraph.html#getStateHistory-com.alibaba.cloud.ai.graph.RunnableConfig-
+[`graph.getState(config)`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/CompiledGraph.html#getState-com.alibaba.cloud.ai.graph.RunnableConfig-
 [PlantUML]: https://plantuml.com
 [java-async-generator]: https://github.com/bsorrentino/java-async-generator
 [Mermaid]: https://mermaid.js.org
-[`graph.getGraph`]: /langgraph4j/apidocs/org/bsc/langgraph4j/CompiledGraph.html#getGraph-com.alibaba.cloud.ai.graph.GraphRepresentation.Type-java.lang.String-
+[`graph.getGraph`]: /SpringAiGraph/apidocs/org/bsc/SpringAiGraph/CompiledGraph.html#getGraph-com.alibaba.cloud.ai.graph.GraphRepresentation.Type-java.lang.String-

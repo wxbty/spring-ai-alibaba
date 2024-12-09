@@ -1,5 +1,5 @@
 /**
- * Provides classes and interfaces for managing the state of agents in the langgraph4j
+ * Provides classes and interfaces for managing the state of agents in the SpringAiGraph
  * framework.
  * <p>
  * This package includes:

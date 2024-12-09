@@ -1,4 +1,4 @@
-package org.bsc.langgraph4j;
+package com.alibaba.cloud.ai.graph.demo;
 
 import com.alibaba.cloud.ai.graph.NodeOutput;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,4 +1,4 @@
-package org.bsc.langgraph4j.studio;
+package com.alibaba.cloud.ai.graph.studio;
 
 import com.alibaba.cloud.ai.graph.CompileConfig;
 import com.alibaba.cloud.ai.graph.CompiledGraph;
@@ -37,15 +37,17 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Optional.ofNullable;
 
-public interface LangGraphStreamingServer {
+public interface StreamingServer {
 
-	Logger log = LoggerFactory.getLogger(LangGraphStreamingServer.class);
+	Map<String, Object> USER_INPUT = new HashMap<>();
+
+	Logger log = LoggerFactory.getLogger(StreamingServer.class);
 
 	CompletableFuture<Void> start() throws Exception;
 
 	class NodeOutputSerializer extends StdSerializer<NodeOutput> {
 
-		Logger log = LangGraphStreamingServer.log;
+		Logger log = StreamingServer.log;
 
 		protected NodeOutputSerializer() {
 			super(NodeOutput.class);
@@ -79,7 +81,7 @@ public interface LangGraphStreamingServer {
 
 	class GraphStreamServlet extends HttpServlet {
 
-		Logger log = LangGraphStreamingServer.log;
+		Logger log = StreamingServer.log;
 
 		final BaseCheckpointSaver saver;
 
@@ -131,6 +133,7 @@ public interface LangGraphStreamingServer {
 
 			// Start asynchronous processing
 			var asyncContext = request.startAsync();
+			asyncContext.setTimeout(60000); // 设置超时时间为60秒
 
 			try {
 
@@ -147,7 +150,6 @@ public interface LangGraphStreamingServer {
 					dataMap = textSerializer.read(new InputStreamReader(request.getInputStream())).data();
 				}
 				else {
-
 					dataMap = objectMapper.readValue(request.getInputStream(), new TypeReference<>() {
 					});
 				}
@@ -226,6 +228,36 @@ public interface LangGraphStreamingServer {
 
 	}
 
+	class GraphUserInputServlet extends HttpServlet {
+
+		final ObjectMapper objectMapper;
+
+		public GraphUserInputServlet(ObjectMapper objectMapper) {
+			this.objectMapper = objectMapper;
+		}
+
+		@Override
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+			final Map<String, Object> dataMap = objectMapper.readValue(request.getInputStream(), new TypeReference<>() {
+			});
+			StreamingServer.USER_INPUT.putAll(dataMap);
+			synchronized (StreamingServer.USER_INPUT) {
+				StreamingServer.USER_INPUT.notify();
+			}
+
+			response.setHeader("Accept", "application/json");
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");
+
+			final PrintWriter writer = response.getWriter();
+
+			writer.println("success");
+			writer.close();
+		}
+
+	}
+
 	record ArgumentMetadata(String type, boolean required) {
 	}
 
@@ -242,7 +274,7 @@ public interface LangGraphStreamingServer {
 
 	class InitDataSerializer extends StdSerializer<InitData> {
 
-		Logger log = LangGraphStreamingServer.log;
+		Logger log = StreamingServer.log;
 
 		protected InitDataSerializer(Class<InitData> t) {
 			super(t);
@@ -284,7 +316,7 @@ public interface LangGraphStreamingServer {
 	 */
 	class GraphInitServlet extends HttpServlet {
 
-		Logger log = LangGraphStreamingServer.log;
+		Logger log = StreamingServer.log;
 
 		final StateGraph<? extends AgentState> stateGraph;
 

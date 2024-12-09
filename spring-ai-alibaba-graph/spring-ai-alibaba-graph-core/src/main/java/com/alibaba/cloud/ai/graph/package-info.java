@@ -1,5 +1,5 @@
 /**
- * The {@code org.bsc.langgraph4j} package provides classes and interfaces for building
+ * The {@code org.bsc.SpringAiGraph} package provides classes and interfaces for building
  * stateful, multi-agent applications with LLMs. It includes core components such as
  * {@link StateGraph}, {@link CompiledGraph}, {@link Node}, and {@link Edge}, which
  * facilitate the creation and management of state graphs.

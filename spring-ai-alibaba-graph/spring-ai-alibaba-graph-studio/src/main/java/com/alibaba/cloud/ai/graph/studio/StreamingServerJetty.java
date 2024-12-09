@@ -1,11 +1,10 @@
-package org.bsc.langgraph4j.studio.jetty;
+package com.alibaba.cloud.ai.graph.studio;
 
 import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.checkpoint.BaseCheckpointSaver;
 import com.alibaba.cloud.ai.graph.checkpoint.MemorySaver;
 import com.alibaba.cloud.ai.graph.state.AgentState;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bsc.langgraph4j.studio.LangGraphStreamingServer;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Handler;
@@ -24,11 +23,11 @@ import java.util.concurrent.CompletableFuture;
  * streaming of LangGraph. Implementations of this interface can be used to create a web
  * server that exposes an API for interacting with compiled language graphs.
  */
-public class LangGraphStreamingServerJetty implements LangGraphStreamingServer {
+public class StreamingServerJetty implements StreamingServer {
 
 	final Server server;
 
-	private LangGraphStreamingServerJetty(Server server) {
+	private StreamingServerJetty(Server server) {
 		Objects.requireNonNull(server, "server cannot be null");
 		this.server = server;
 	}
@@ -97,7 +96,7 @@ public class LangGraphStreamingServerJetty implements LangGraphStreamingServer {
 			return this;
 		}
 
-		public LangGraphStreamingServerJetty build() throws Exception {
+		public StreamingServerJetty build() throws Exception {
 			Objects.requireNonNull(stateGraph, "stateGraph cannot be null");
 
 			if (saver == null) {
@@ -129,12 +128,13 @@ public class LangGraphStreamingServerJetty implements LangGraphStreamingServer {
 			context.addServlet(new ServletHolder(new GraphInitServlet(stateGraph, title, inputArgs)), "/init");
 
 			context.addServlet(new ServletHolder(new GraphStreamServlet(stateGraph, objectMapper, saver)), "/stream");
+			context.addServlet(new ServletHolder(new GraphUserInputServlet(objectMapper)), "/user/input");
 
 			var handlerList = new Handler.Sequence(resourceHandler, context);
 
 			server.setHandler(handlerList);
 
-			return new LangGraphStreamingServerJetty(server);
+			return new StreamingServerJetty(server);
 
 		}
 

@@ -15,12 +15,12 @@
     </custom>
     <!--
     <bannerLeft>
-        <src>langgraph4j.png</src>
+        <src>SpringAiGraph.png</src>
         <href>/</href>
-        <name>langgraph4j</name>
+        <name>SpringAiGraph</name>
     </bannerLeft>
     <bannerRight>
-        <src>langgraph4j.png</src>
+        <src>SpringAiGraph.png</src>
     </bannerRight>
     -->
 

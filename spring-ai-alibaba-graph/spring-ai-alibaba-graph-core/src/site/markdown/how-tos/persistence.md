@@ -2,7 +2,7 @@
 
 ## How to add persistence ("memory") to your graph
 
-Many AI applications need memory to share context across multiple interactions. In LangGraph4j, memory is provided for any [`StateGraph`] through [`Checkpointers`].
+Many AI applications need memory to share context across multiple interactions. In SpringAiGraph, memory is provided for any [`StateGraph`] through [`Checkpointers`].
 
 When creating any LangGraph workflow, you can set them up to persist their state by doing using the following:
 
@@ -29,10 +29,10 @@ var compileConfig = CompileConfig.builder()
 var persistentGraph = workflow.compile( compileConfig );
 ```
 
-[`StateGraph`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/StateGraph.html
-[`Checkpointers`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/BaseCheckpointSaver.html
-[`Checkpointer`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/Checkpoint.html
-[`MemorySaver`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/MemorySaver.html
+[`StateGraph`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/StateGraph.html
+[`Checkpointers`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/checkpoint/BaseCheckpointSaver.html
+[`Checkpointer`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/checkpoint/Checkpoint.html
+[`MemorySaver`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/checkpoint/MemorySaver.html
 
 ## Define the state
 
@@ -41,8 +41,8 @@ State is an (immutable) data class, inheriting from [`AgentState`], shared with 
 1. Schema (optional), that is a `Map<String,Channel>` where each [`Channel`] describe behaviour of the related property
 1. `value()` accessors that inspect Map an return an Optional of value contained and cast to the required type
 
-[`Channel`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/state/Channel.html
-[`AgentState`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/state/AgentState.html
+[`Channel`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/Channel.html
+[`AgentState`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/state/AgentState.html
 
 ```java
 import state.com.alibaba.ai.graph.AgentState;
@@ -78,16 +78,16 @@ public class MessageState extends AgentState {
 
 ## Create Serializer
 
-Every object that should be stored into State **MUST BE SERIALIZABLE**. If the object is not `Serializable` by default, Langgraph4j provides a way to build and associate a custom [`Serializer`] to it. 
+Every object that should be stored into State **MUST BE SERIALIZABLE**. If the object is not `Serializable` by default, SpringAiGraph provides a way to build and associate a custom [`Serializer`] to it. 
 
 In the example, since [`AiMessage`] from Langchain4j is not Serialzable we have to create an register a new custom [`Serializer`].
 
-[`Serializer`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/serializer/Serializer.html
+[`Serializer`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/serializer/Serializer.html
 [`AiMessage`]: https://docs.langchain4j.dev/apidocs/dev/langchain4j/data/message/AiMessage.html
 
 ```java
 
-import org.bsc.langgraph4j.serializer.NullableObjectSerializer;
+import org.bsc.SpringAiGraph.serializer.NullableObjectSerializer;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.agent.tool.ToolExecutionRequest;
 
@@ -186,7 +186,7 @@ Now we will load the
 
 Note:
    >
-   > These model requirements are not general requirements for using LangGraph4j - they are just requirements for this one example.
+   > These model requirements are not general requirements for using SpringAiGraph - they are just requirements for this one example.
    >
 
 [chat model]: https://docs.langchain4j.dev/tutorials/chat-and-language-models
@@ -336,7 +336,7 @@ Let's try it again with a checkpointer. We will use the
 [`MemorySaver`],
 which will "save" checkpoints in-memory.
 
-[`MemorySaver`]: https://bsorrentino.github.io/langgraph4j/apidocs/org/bsc/langgraph4j/checkpoint/MemorySaver.html
+[`MemorySaver`]: https://bsorrentino.github.io/SpringAiGraph/apidocs/org/bsc/SpringAiGraph/checkpoint/MemorySaver.html
 
 ```java
 

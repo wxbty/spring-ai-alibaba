@@ -1,3 +1,3 @@
-# 🦜🕸️ LangGraph4j Studio
+# 🦜🕸️ SpringAiGraph Studio
 
-An **embed playground webapp** that runs a Langgraph4j workflow in visual way.
+An **embed playground webapp** that runs a SpringAiGraph workflow in visual way.

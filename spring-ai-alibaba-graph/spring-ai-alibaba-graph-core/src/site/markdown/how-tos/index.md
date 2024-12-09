@@ -5,22 +5,22 @@ hide:
 
 # How-to guides
 
-Welcome to the LangGraph4j how-to Guides! These guides provide practical, step-by-step instructions for accomplishing key tasks in LangGraph4j.
+Welcome to the SpringAiGraph how-to Guides! These guides provide practical, step-by-step instructions for accomplishing key tasks in SpringAiGraph.
 
 ## Installation
 
 **Maven**
 ```xml
 <dependency>
-    <groupId>org.bsc.langgraph4j</groupId>
-    <artifactId>langgraph4j-core-jdk8</artifactId>
+    <groupId>org.bsc.SpringAiGraph</groupId>
+    <artifactId>SpringAiGraph-core-jdk8</artifactId>
     <version>1.0-rc2</version>
 </dependency>
 ```
 
 ## Controllability
 
-LangGraph4j is known for being a highly controllable agent framework.
+SpringAiGraph is known for being a highly controllable agent framework.
 These how-to guides show how to achieve that controllability.
 > _TO DO_
 <!-- 
@@ -32,7 +32,7 @@ These how-to guides show how to achieve that controllability.
 
 ## Persistence
 
-LangGraph4j makes it easy to persist state across graph runs. The guides below shows how to add persistence to your graph.
+SpringAiGraph makes it easy to persist state across graph runs. The guides below shows how to add persistence to your graph.
 > _TO DO_
 <!-- 
 - [How to add persistence ("memory") to your graph](persistence.html)
@@ -45,7 +45,7 @@ LangGraph4j makes it easy to persist state across graph runs. The guides below s
 
 ## Human-in-the-loop
 
-One of LangGraph4j's main benefits is that it makes human-in-the-loop workflows easy.
+One of SpringAiGraph's main benefits is that it makes human-in-the-loop workflows easy.
 These guides cover common examples of that.
 > _TO DO_
 <!-- 
@@ -56,7 +56,7 @@ These guides cover common examples of that.
  -->
 ## Streaming
 
-LangGraph4j is built to be streaming first.
+SpringAiGraph is built to be streaming first.
 These guides show how to use different streaming modes.
 > _TO DO_
 <!-- 
