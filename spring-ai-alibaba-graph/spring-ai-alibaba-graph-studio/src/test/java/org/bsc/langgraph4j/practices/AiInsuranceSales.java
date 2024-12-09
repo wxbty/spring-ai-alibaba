@@ -1,4 +1,4 @@
-package com.alibaba.cloud.ai.graph.demo.jetty;
+package org.bsc.langgraph4j.practices;
 
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -7,20 +7,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.ai.alibaba.samples.executor.AgentExecutor;
 import dev.ai.alibaba.samples.executor.AgentService;
 import dev.ai.alibaba.samples.executor.ToolService;
-import com.alibaba.cloud.ai.graph.studio.StreamingServerJetty;
+import org.bsc.langgraph4j.studio.jetty.LangGraphStreamingServerJetty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
+//状态 1：AI 已发送开场白
+//状态 2：用户已发送文字
+//状态 3：判断用户输入内容是否包括全部所需要信息（年龄、性别、学历……）
+//状态 4：追问用户缺失信息
+//状态 5：结合保险知识库向用户推荐相关保险产品
+//状态 6：用户已发送文字
+//状态 7：判断用户是否表达购买意愿
+
 @Import({ AgentService.class, ToolService.class })
 @SpringBootApplication
-public class AgentExecutorStreamingServer {
+public class AiInsuranceSales {
 
 	public static void main(String[] args) throws Exception {
 		// 因为studio的jetty占用了8080端口，修改springboot端口避免冲突
 		System.setProperty("server.port", "8090");
-		ConfigurableApplicationContext context = SpringApplication.run(AgentExecutorStreamingServer.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(AiInsuranceSales.class, args);
 		// AgentService注入了spring-ai的ChatClient，引入dashscope包后，默认注入百炼大模型
 		AgentService agentService = context.getBean(AgentService.class);
 		// 没有使用springmvc，所以手动用jackson进行参数映射
@@ -53,7 +61,7 @@ public class AgentExecutorStreamingServer {
 		 * usecaseStereotypeFontSize 12 skinparam hexagonFontSize 14 skinparam
 		 * hexagonStereotypeFontSize 12 title "Adaptive RAG" footer
 		 *
-		 * powered by SpringAiGraph end footer circle start<<input>> circle stop as __END__
+		 * powered by langgraph4j end footer circle start<<input>> circle stop as __END__
 		 * usecase "agent"<<Node>> usecase "action"<<Node>> hexagon "check state" as
 		 * condition1<<Condition>> start -down-> "agent" "agent" -down-> "condition1"
 		 * "condition1" --> "action": "continue" '"agent" --> "action": "continue"
@@ -63,7 +71,7 @@ public class AgentExecutorStreamingServer {
 		 * @enduml
 		 */
 
-		var server = StreamingServerJetty.builder()
+		var server = LangGraphStreamingServerJetty.builder()
 			.port(8080)
 			.objectMapper(objectMapper)
 			.title("AGENT EXECUTOR")

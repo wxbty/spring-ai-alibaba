@@ -5,21 +5,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import dev.ai.alibaba.samples.executor.AgentExecutor;
-import dev.ai.alibaba.samples.executor.AgentOutcome;
 import dev.ai.alibaba.samples.executor.IntermediateStep;
+import dev.ai.alibaba.samples.executor.state.GeneralState;
+import dev.ai.alibaba.samples.executor.state.Outcome;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.ai.alibaba.samples.executor.AgentExecutor.State.AGENT_OUTCOME;
+import static dev.ai.alibaba.samples.executor.state.GeneralState.AGENT_OUTCOME;
 
-class StateDeserializer extends JsonDeserializer<AgentExecutor.State> {
+public class StateDeserializer extends JsonDeserializer<GeneralState> {
 
 	@Override
-	public AgentExecutor.State deserialize(JsonParser parser, DeserializationContext ctx)
+	public GeneralState deserialize(JsonParser parser, DeserializationContext ctx)
 			throws IOException, JsonProcessingException {
 		JsonNode node = parser.getCodec().readTree(parser);
 
@@ -47,10 +47,10 @@ class StateDeserializer extends JsonDeserializer<AgentExecutor.State> {
 
 		var agentOutcomeNode = dataNode.get(AGENT_OUTCOME);
 		if (agentOutcomeNode != null && !agentOutcomeNode.isNull()) { // GUARD
-			var agentOutcome = ctx.readValue(agentOutcomeNode.traverse(parser.getCodec()), AgentOutcome.class);
+			var agentOutcome = ctx.readValue(agentOutcomeNode.traverse(parser.getCodec()), Outcome.class);
 			data.put("agent_outcome", agentOutcome);
 		}
-		return new AgentExecutor.State(data);
+		return new GeneralState(data);
 	}
 
 }
