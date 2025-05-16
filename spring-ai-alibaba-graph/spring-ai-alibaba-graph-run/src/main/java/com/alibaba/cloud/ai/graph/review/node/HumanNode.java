@@ -1,4 +1,4 @@
-package com.alibaba.cloud.ai.graph.practice.insurance_sale.node;
+package com.alibaba.cloud.ai.graph.review.node;
 
 import com.alibaba.cloud.ai.graph.action.NodeAction;
 import com.alibaba.cloud.ai.graph.state.NodeState;

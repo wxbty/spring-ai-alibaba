@@ -1,0 +1,53 @@
+#
+# Copyright 2024-2025 the original author or authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+server:
+  port: 18080
+
+#  spring.servlet.multipart.max-file-size=100MB
+#  spring.servlet.multipart.max-request-size=100MB
+
+spring:
+  application:
+    name: spring-ai-alibaba-helloworld
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  datasource:
+    url: jdbc:mysql://117.72.42.149:3306/literature?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+    username: root
+    password: afbc69bd64449ee9
+    tomcat:
+      test-on-borrow: true
+      validation-query: SELECT 1
+      test-while-idle: true
+  ai:
+    alibaba:
+      toolcalling:
+        weather:
+          enabled: true
+          api-key: ${WEATHER_API_KEY}
+    dashscope:
+      api-key: ${DASH_SCOPE_API_KEY}
+    openai:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      chat:
+        options:
+          model: qwen-max-latest
+          timeout: 3000
